@@ -1,5 +1,5 @@
 var AtomicHooks = require('level-atomichooks');
-var padlock = require('padlock').Padlock;
+var Padlock = require('padlock').Padlock;
 
 function LevelIncrement(db, opts) {
     db = AtomicHooks(db);
@@ -39,6 +39,8 @@ function LevelIncrement(db, opts) {
             db.parent.put(key, value, opts, callback);
         }
     };
+
+    return db;
 }
 
 module.exports = LevelIncrement;
