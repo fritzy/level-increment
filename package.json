@@ -1,0 +1,30 @@
+{
+  "name": "level-increment",
+  "version": "0.0.0",
+  "description": "Incrementing in level with a put option.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fritzy/level-increment.git"
+  },
+  "keywords": [
+    "level",
+    "increment",
+    "count",
+    "db",
+    "database"
+  ],
+  "author": "Nathan Fritz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fritzy/level-increment/issues"
+  },
+  "homepage": "https://github.com/fritzy/level-increment",
+  "dependencies": {
+    "level-atomichooks": "0.0.3",
+    "padlock": "^1.1.2"
+  }
+}
