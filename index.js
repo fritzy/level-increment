@@ -13,7 +13,7 @@ function LevelIncrement(db, opts) {
             callback = opts;
             opts = {};
         }
-        if (opts.type === 'increment') {
+        if (opts.type === 'counter') {
             lock.runwithlock(function () {
                 db.parent.get(key, opts, function (err, val) {
                     if (err || !val) {
