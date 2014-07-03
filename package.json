@@ -1,6 +1,6 @@
 {
   "name": "level-increment",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Incrementing in level with a put option.",
   "main": "index.js",
   "scripts": {
