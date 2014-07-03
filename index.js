@@ -40,6 +40,24 @@ function LevelIncrement(db, opts) {
         }
     };
 
+    db.get = function (key, opts, callback) {
+        if (typeof opts === 'function') {
+            callback = opts;
+            opts = {};
+        }
+        if (opts.type ===  'counter') {
+            db.parent.get(key, opts, function (err, val) {
+                if (err || !val) {
+                    callback(undefined, 0);
+                } else {
+                    callback(err, val);
+                }
+            });
+        } else {
+            db.parent.get(key, opts, callback);
+        }
+    }
+
     return db;
 }
 
