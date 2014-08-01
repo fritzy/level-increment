@@ -16,6 +16,7 @@ function LevelIncrement(db, opts) {
         if (opts.type === 'counter') {
             lock.runwithlock(function () {
                 db.parent.get(key, opts, function (err, val) {
+                    var count;
                     if (err || !val) {
                         count = 0;
                     } else {
