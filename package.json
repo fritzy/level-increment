@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/fritzy/level-increment",
   "dependencies": {
-    "level-atomichooks": "0.0.3",
     "padlock": "^1.1.2"
   }
 }
