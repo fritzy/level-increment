@@ -1,47 +1,45 @@
-var AtomicHooks = require('level-atomichooks');
 var Padlock = require('padlock').Padlock;
 
-function LevelIncrement(db, opts) {
-    db = AtomicHooks(db);
-
+function LevelIncrement(parent, optsinc) {
     var lock = new Padlock();
 
-    db.optsinc = opts || {};
+    optsinc = optsinc || {};
 
-    db.put = function (key, value, opts, callback) {
+    function DB() {};
+    DB.prototype = parent;
+    var db = new DB();
+    db.parent = parent;
+
+    db.increment = function (key, value, opts, callback) {
         if (typeof opts === 'function') {
             callback = opts;
             opts = {};
         }
-        if (opts.type === 'counter') {
-            lock.runwithlock(function () {
-                db.parent.get(key, opts, function (err, val) {
-                    var count;
-                    if (err || !val) {
-                        count = 0;
-                    } else {
-                        count = parseInt(val, 10);
-                    }
-                    count += value;
-                    if (count === 0) {
-                        db.parent.del(key, opts, function (err) {
-                            lock.release();
-                            callback(err, count);
-                        });
-                    } else {
-                        db.parent.put(key, count, opts, function (err) {
-                            lock.release();
-                            callback(err, count);
-                        });
-                    }
-                });
+        lock.runwithlock(function () {
+            db.parent.get(key, opts, function (err, val) {
+                var count;
+                if (err || !val) {
+                    count = 0;
+                } else {
+                    count = parseInt(val, 10);
+                }
+                count += value;
+                if (count === 0) {
+                    db.parent.del(key, opts, function (err) {
+                        lock.release();
+                        callback(undefined, count);
+                    });
+                } else {
+                    db.parent.put(key, count, opts, function (err) {
+                        lock.release();
+                        callback(err, count);
+                    });
+                }
             });
-        } else {
-            db.parent.put(key, value, opts, callback);
-        }
+        });
     };
 
-    db.get = function (key, opts, callback) {
+    db.getCount = function (key, opts, callback) {
         if (typeof opts === 'function') {
             callback = opts;
             opts = {};
@@ -55,7 +53,12 @@ function LevelIncrement(db, opts) {
                 }
             });
         } else {
-            db.parent.get(key, opts, callback);
+            db.parent.get(key, opts, function (err, value) {
+                if (err || !value) {
+                    value = 0;
+                }
+                callback(undefined, value);
+            });
         }
     }
 
